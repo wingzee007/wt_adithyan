@@ -1,115 +1,96 @@
-/* ---------- GLOBAL SETTINGS ---------- */
-:root {
-    --py-blue: #3776ab;
-    --py-yellow: #ffd343;
-    --bg-dark: #0a0c10;
-    --border-glass: rgba(255, 255, 255, 0.1);
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyWing | Galaxy Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+    <canvas id="bg-canvas"></canvas>
 
-body {
-    margin: 0;
-    font-family: 'EB Garamond', serif;
-    background-color: var(--bg-dark);
-    overflow-x: hidden;
-    color: #ffffff;
-}
+    <div class="page-bg">
+        <div class="container-wrapper">
 
-/* ---------- GALAXY CANVAS ---------- */
-#bg-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.5;
-}
+            <a href="learning_guide.html" class="glass-box">
+                <span class="module-tag">>>> MODULE 01</span>
+                Learn
+            </a>
 
-/* ---------- LAYOUT WRAPPERS ---------- */
-.page-bg {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-}
+            <a href="question/index.php" class="glass-box">
+                <span class="module-tag">>>> MODULE 02</span>
+                Apply
+            </a>
 
-.container-wrapper {
-    width: 100%;
-    max-width: 1200px;
-    margin: auto;
-    padding: 24px;
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    flex-wrap: wrap; /* Wraps boxes on smaller screens */
-    align-items: center;
-}
+            <a href="question/question_T.php" class="glass-box">
+                <span class="module-tag">>>> MODULE 03</span>
+                Memorize
+            </a>
 
-/* ---------- GLASS BOX DESIGN ---------- */
-.glass-box {
-    width: 320px;
-    height: 200px;
-    background: rgba(22, 27, 34, 0.6); /* Darkened glass for better contrast */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    
-    border: 1px solid var(--border-glass);
-    border-radius: 24px;
-    
-    color: #ffffff;
-    font-size: 1.6rem;
-    font-weight: 700;
-    text-decoration: none;
-    
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    position: relative;
-}
+        </div>
+    </div>
 
-.module-tag {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    color: var(--py-blue);
-    opacity: 0.8;
-}
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
-/* ---------- INTERACTIVE EFFECTS ---------- */
-.glass-box:hover {
-    transform: translateY(-10px);
-    border-color: var(--py-yellow);
-    background: rgba(30, 41, 59, 0.8);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 
-                0 0 25px rgba(255, 211, 67, 0.1);
-}
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            // Create 120 nodes for the network
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5
+                });
+            }
+        }
 
-.glass-box:hover .module-tag {
-    color: var(--py-yellow);
-    opacity: 1;
-}
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffd343'; // Python Yellow Atoms
 
-/* ---------- RESPONSIVE DESIGN ---------- */
-@media (max-width: 768px) {
-    .container-wrapper {
-        flex-direction: column;
-        justify-content: center;
-    }
+            particles.forEach((p, i) => {
+                p.x += p.vx;
+                p.y += p.vy;
 
-    .glass-box {
-        width: 100%;
-        max-width: 360px;
-    }
-}
+                // Bounce off edges
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Connect nodes within 150px range
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 150) {
+                        ctx.strokeStyle = `rgba(55, 118, 171, ${1 - dist / 150})`; // Python Blue Lines
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', init);
+        init();
+        draw();
+    </script>
+</body>
+</html>
