@@ -1,0 +1,67 @@
+
+*{
+    background-color: rgb(232, 238, 238);
+}
+.grid
+{
+    display: grid;
+    grid-template-columns: repeat(4,3fr);
+    gap: 4px;
+    width: 750px;
+    height: 340px;
+    margin: 20px;
+    font-family: 'Gill Sans','Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: medium;
+    color: rgba(0, 0, 0, 0.658);
+    
+}
+.class
+{
+    background-color: rgb(255, 254, 254);
+    border: 2px solid black;
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
+    border-radius: 3px;
+}
+h2{
+    color: rgba(0, 0, 0, 0.521);
+    background-color: rgb(255, 255, 255);
+    padding:12px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    
+}
+li
+{
+    background-color: white;
+    margin-bottom: 2PX;
+    border: 2px solid black;
+    height: 30px;
+    border-radius: 4px;
+    padding:12px;
+    font-weight: 900;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.other-cities
+{
+    list-style: none;
+    
+
+}
+.new{
+    background-color: rgb(250, 248, 246);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: black;
+    text-align: center;
+}
+.search
+{
+    color: grey;
+    background-color: white;
+    margin-bottom: 2PX;
+    border: 2px solid black;
+    height: 30px;
+    border-radius: 4px;
+    padding:12px;
+}
+
