@@ -1,1 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0a0c10">
+  <meta name="description" content="PyWing – Your personal path to mastering Python programming from basics to advanced concepts.">
+
+  <title>PyWing | Your Python Journey</title>
+
+  <style>
+    :root {
+      --bg-dark: #0a0c10;
+      --card-bg: #161b22;
+      --py-blue: #3776ab;
+      --py-yellow: #ffd343;
+      --text-main: #e6edf3;
+      --text-dim: #8b949e;
+      --transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Accessibility: Focus */
+    a:focus-visible {
+      outline: 3px solid var(--py-yellow);
+      outline-offset: 4px;
+      border-radius: 8px;
+    }
+
+    /* Background Canvas */
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.35;
+    }
+
+    .container {
+      width: min(92%, 1000px);
+      margin-inline: auto;
+      padding: 60px 0;
+      text-align: center;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--py-blue), var(--py-yellow));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: var(--text-dim);
+      margin-bottom: 40px;
+      font-size: clamp(0.75rem, 2.5vw, 1rem);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Intro Section */
+    .intro-card {
+      max-width: 800px;
+      margin: 0 auto 60px auto;
+      padding: clamp(25px, 4vw, 40px);
+      background: rgba(22, 27, 34, 0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: left;
+    }
+
+    .method-box {
+      background: rgba(0, 0, 0, 0.25);
+      padding: 20px;
+      border-radius: 12px;
+      border-left: 4px solid var(--py-blue);
+      margin: 25px 0;
+    }
+
+    .method-step {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-family: monospace;
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+    }
+
+    /* Module Grid */
+    .box-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      padding-inline: 10px;
+    }
+
+    .box {
+      background: var(--card-bg);
+      border: 1px solid #30363d;
+      border-radius: 20px;
+      padding: 35px 25px;
+      text-decoration: none;
+      color: inherit;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      min-height: 260px;
+    }
+
+    .box:hover {
+      transform: translateY(-8px);
+      border-color: var(--py-yellow);
+      background: #1c2128;
+    }
+
+    .box h2 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: var(--py-yellow);
+    }
+
+    .hover-content {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: var(--transition);
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .box:hover .hover-content,
+    .box:focus-visible .hover-content {
+      max-height: 400px;
+      opacity: 1;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .hover-content ul {
+      list-style: none;
+      padding-left: 5px;
+    }
+
+    .hover-content li {
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .hover-content li::before {
+      content: "→";
+      color: var(--py-blue);
+    }
+
+    .limitation {
+      font-size: 0.75rem;
+      color: #ff7b72;
+      font-style: italic;
+      margin-top: 10px;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      background: rgba(55, 118, 171, 0.25);
+      color: #58a6ff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      width: fit-content;
+      margin-bottom: 15px;
+    }
+
+    footer {
+      margin-top: 80px;
+      padding: 30px 15px;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    /* Reduced Motion Support */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+      #bg-canvas {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body role="document">
+
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<main class="container" role="main">
+  <h1>PyWing</h1>
+  <p class="subtitle">Your Personal Path to Python</p>
+ <div class="intro-card">
+      <p>
+        <strong>PyWing</strong> is your personal entry point into the world of programming. This platform is designed as a complete, self-paced ecosystem that takes you from the very first <code>print("Hello World")</code> to building complex <strong>Object-Oriented</strong> systems and professional business logic.
+      </p>
+
+      <p>
+        Stay on track by monitoring your growth as you move through our interactive curriculum. If you hit a roadblock, our <strong>AI Mentor</strong> is always ready to help you break down complex concepts into simple, bite-sized problems.
+      </p>
+
+      <div class="method-box">
+        <h3 style="color: var(--py-blue); margin-bottom: 15px; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;">The PyWing Success Method:</h3>
+        <div class="method-step"><b style="color: var(--py-yellow);">1. ANALYZE:</b> Look at the topic and study the description.</div>
+        <div class="method-step"><b style="color: var(--py-yellow);">2. EXECUTE:</b> Write the code yourself in our live environment.</div>
+        <div class="method-step"><b style="color: var(--py-yellow);">3. ITERATE:</b> Check your results. Is it right? <b>Good.</b> Is it wrong? <b>Great.</b></div>
+        <p style="font-size: 0.85rem; margin-top: 10px; color: var(--text-dim); padding-left: 38px;">
+          Do it again and again until the logic becomes second nature. This is where real mastery begins.
+        </p>
+      </div>
+
+      <p>
+        Our quizzes aren't about rote memorization. They are designed to guide you through the essential building blocks—ensuring you understand the <i>why</i> behind every line of code, whether you're printing text or developing a fully functional business website.
+      </p>
+
+      <p style="text-align: center; margin-top: 30px; font-weight: 700; color: var(--py-yellow); letter-spacing: 1px;">
+        LEARN • APPLY • MEMORIZE — Let’s begin the journey.
+      </p>
+    </div>
+    </div>
+
+    <div class="box-wrapper">
+      <a href="select.html" class="box">
+        <span class="tag">LEARN</span>
+        <h2>40 Core Topics</h2>
+        <p>A step-by-step roadmap from variables to functions.</p>
+        
+        <div class="hover-content">
+          <ul>
+            <li><b>Definitions & Examples:</b> Clear explanations for every topic.</li>
+            <li><b>Integrated Practice:</b> Questions to test your logic immediately.</li>
+            <li><b>AI Mode:</b> Search and learn with an AI assistant.</li>
+            <li><b>Code Runner:</b> Execute code instantly in your browser.</li>
+          </ul>
+          <span class="limitation">Note: Browser runner cannot take user inputs or import external modules.</span>
+        </div>
+      </a>
+
+      <a href="question/index.php" class="box">
+        <span class="tag">PRACTICE</span>
+        <h2>Practical Lab</h2>
+        <p>140 Hands-on coding challenges to master logic.</p>
+        
+        <div class="hover-content">
+          <ul>
+            <li><b>Read & Understand:</b> Study the question requirements carefully.</li>
+            <li><b>Write the Code:</b> Build the solution from scratch.</li>
+            <li><b>Iterative Learning:</b> If it shows an error, great! Practice again until it runs perfectly.</li>
+          </ul>
+        </div>
+      </a>
+
+      <a href="question/question_T.php" class="box">
+        <span class="tag">QUIZ</span>
+        <h2>Theory Quiz</h2>
+        <p>Short check-ins on the most important concepts.</p>
+        
+        <div class="hover-content">
+          <ul>
+            <li><b>Essential Focus:</b> Covers Definitions, Classes, and Functions.</li>
+            <li><b>Keyword Mastery:</b> Practice the building blocks of Python syntax.</li>
+            <li><b>Memory Sharpener:</b> Designed to turn theory into long-term knowledge.</li>
+          </ul>
+        </div>
+      </a>
+    </div>
+
+    <footer>
+      © 2025 PyWing • Built for Beginners • Let's begin the journey.
+    </footer>
+  </div>
+
+  <!-- YOUR CONTENT UNCHANGED -->
+  <!-- (Intro card, boxes, footer remain exactly as you provided) -->
+</main>
+
+<script>
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+
+  let particles = [];
+  const isMobile = window.innerWidth < 768;
+  const PARTICLE_COUNT = isMobile ? 60 : 100;
+
+  function init() {
+    canvas.width = window.innerWidth * devicePixelRatio;
+    canvas.height = window.innerHeight * devicePixelRatio;
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+
+    particles = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 1.5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p, i) => {
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
+      if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffd343';
+      ctx.fill();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const d = Math.hypot(p.x - p2.x, p.y - p2.y);
+        if (d < 130) {
+          ctx.strokeStyle = `rgba(55,118,171,${1 - d / 130})`;
+          ctx.lineWidth = 0.4;
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', init);
+  init();
+  draw();
+</script>
+
+</body>
+</html>
 
