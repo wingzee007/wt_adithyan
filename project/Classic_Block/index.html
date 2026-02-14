@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Block Puzzle</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="game-wrapper">
+        <div class="main-column">
+            <div class="stats">Score: <span id="score-val">0</span></div>
+            <div id="grid"></div>
+        </div>
+
+        <div class="sidebar">
+            <div class="side-panel">
+                <p>NEXT</p>
+                <div id="next-preview"></div>
+            </div>
+            
+            <div class="side-panel">
+                <p>SPEED</p>
+                <select id="speed-select">
+                    <option value="0.25">0.25x</option>
+                    <option value="0.5">0.5x</option>
+                    <option value="1" selected>1.0x (Normal)</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2.0x (Fast)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls-container">
+        <button class="btn" id="btn-left">←</button>
+        <button class="btn rotate-btn" id="btn-rotate">↻</button>
+        <button class="btn" id="btn-right">→</button>
+        <button class="btn" id="btn-down">↓</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
