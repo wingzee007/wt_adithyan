@@ -1,0 +1,27 @@
+# Default file
+DirectoryIndex index.html index.php
+
+# Prevent directory listing
+Options -Indexes
+
+# Block direct access to sensitive files
+<FilesMatch "(config|db)\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Allow other PHP files (API endpoints)
+<FilesMatch "\.php$">
+    Order deny,allow
+    Allow from all
+</FilesMatch>
+
+# Protect .htaccess itself
+<Files ".htaccess">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Enable PHP error reporting (DEV ONLY)
+php_flag display_errors On
+php_value error_reporting E_ALL
