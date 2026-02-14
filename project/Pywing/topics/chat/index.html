@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PyWing | AI Logic Chat</title>
+<style>
+  :root {
+    --bg-dark: #07090c;
+    --card-bg: rgba(22, 27, 34, 0.8);
+    --py-blue: #3776ab;
+    --py-yellow: #ffd343;
+    --text-main: #e6edf3;
+    --text-dim: #8b949e;
+    --border: rgba(255, 255, 255, 0.1);
+    --accent-gradient: linear-gradient(135deg, #3776ab, #5a9fd4);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', 'Inter', system-ui, sans-serif;
+    background-color: var(--bg-dark);
+    /* Background Image from Reference */
+    background-image: url('../../WhatsApp Image 2026-01-20 at 7.40.01 PM.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: var(--text-main);
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(13, 17, 23, 0.5); 
+    z-index: 0;
+  }
+
+  .app { 
+    display: flex; 
+    width: 100%; 
+    z-index: 1; 
+    position: relative;
+    height: 100vh;
+  }
+
+  /* SIDEBAR - RESPONSIVE */
+  .sidebar {
+    width: 280px;
+    background: rgba(13, 17, 23, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid var(--border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+  }
+
+  /* BACK BUTTON FEATURE */
+  .back-nav {
+    margin-bottom: 25px;
+  }
+  .btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    background: rgba(255,255,255,0.05);
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: 0.2s;
+  }
+  .btn-back:hover {
+    background: var(--py-blue);
+    border-color: var(--py-blue);
+  }
+
+  .sidebar h2 { 
+    font-size: 11px; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    margin-bottom: 15px; 
+    color: var(--py-yellow); 
+    font-weight: 800;
+  }
+
+  .history { flex: 1; overflow-y: auto; }
+  
+  .history-item { 
+    padding: 12px; 
+    margin-bottom: 8px; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-size: 13px; 
+    color: var(--text-dim); 
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .history-item:hover { 
+    background: rgba(55, 118, 171, 0.2); 
+    color: var(--text-main); 
+    border-color: var(--py-blue);
+  }
+
+  /* CHAT AREA - RESPONSIVE */
+  .chat-area { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    background: transparent;
+    width: 100%;
+  }
+
+  .chat-header { 
+    padding: 15px 25px; 
+    background: rgba(13, 17, 23, 0.6);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border); 
+    font-weight: 700; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .chat-body { 
+    flex: 1; 
+    overflow-y: auto; 
+    padding: 20px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+  }
+
+  .message { 
+    max-width: 85%; 
+    padding: 14px 18px; 
+    border-radius: 15px; 
+    line-height: 1.5; 
+    font-size: 14px; 
+    white-space: pre-wrap; 
+    word-wrap: break-word;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  .message.user { 
+    align-self: flex-end; 
+    background: var(--accent-gradient); 
+    color: white; 
+    border-bottom-right-radius: 2px;
+  }
+
+  .message.bot { 
+    align-self: flex-start; 
+    background: rgba(22, 27, 34, 0.95); 
+    border: 1px solid var(--border); 
+    border-bottom-left-radius: 2px;
+  }
+
+  /* INPUT AREA - RESPONSIVE */
+  .chat-input { 
+    padding: 20px; 
+    background: linear-gradient(to top, rgba(13, 17, 23, 0.9), transparent);
+  }
+
+  .input-wrapper { 
+    display: flex; 
+    gap: 10px; 
+    max-width: 800px; 
+    margin: 0 auto; 
+    background: rgba(22, 27, 34, 0.95); 
+    padding: 8px 15px; 
+    border-radius: 50px; 
+    border: 1px solid var(--py-blue);
+  }
+
+  #chatbot-input { 
+    flex: 1; 
+    background: transparent; 
+    border: none; 
+    color: #fff; 
+    outline: none; 
+    padding-left: 10px;
+    font-size: 15px;
+  }
+
+  #send-btn { 
+    background: var(--py-blue); 
+    border: none; 
+    color: #fff; 
+    padding: 10px 24px; 
+    border-radius: 50px; 
+    cursor: pointer; 
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+
+  /* RESPONSIVE MEDIA QUERIES */
+  @media (max-width: 768px) {
+    .sidebar {
+      position: absolute;
+      left: -280px; /* Hide sidebar on mobile */
+      height: 100%;
+      z-index: 10;
+    }
+    /* Simple trick: Sidebar shows when a class is added via JS if you want, 
+       but for now we prioritize the chat space on mobile */
+    .message { max-width: 90%; }
+    .chat-header { padding: 15px; }
+    .chat-body { padding: 15px; }
+    .chat-input { padding: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    #send-btn { padding: 10px 15px; }
+    .chat-header { font-size: 14px; }
+    .input-wrapper { padding: 5px 12px; }
+  }
+
+  pre { background: #010409; padding: 12px; border-radius: 8px; border: 1px solid var(--border); overflow-x: auto; position: relative; }
+  .copy-btn { position: absolute; top: 5px; right: 5px; background: var(--py-blue); color: white; border: none; padding: 3px 8px; border-radius: 4px; font-size: 10px; cursor: pointer; }
+
+</style>
+</head>
+
+<body>
+<div class="overlay"></div>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="back-nav">
+   <a href="https://pywing.rf.gd/topics/learn.html" class="btn-back">Back to Lessons</a>
+
+    </div>
+
+    <h2>Logic History</h2>
+    <div class="history" id="history">
+      <div style="color:#8b949e;font-size:12px;padding: 10px;">Initializing history...</div>
+    </div>
+  </div>
+
+  <div class="chat-area">
+    <div class="chat-header">
+      <span>PyWing Logic</span>
+      <span style="color: var(--py-yellow); font-size: 12px; font-weight: 400;">Online</span>
+    </div>
+
+    <div class="chat-body" id="chatbot-messages">
+      <div class="message bot">
+        Welcome! I am PyWing. Ask me to explain any logic, code, or technical concept.
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <div class="input-wrapper">
+        <input id="chatbot-input" placeholder="Explain recursion logic..." autocomplete="off" />
+        <button id="send-btn">Explore</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const historyDiv = document.getElementById("history");
+  const sendBtn = document.getElementById("send-btn");
+  const input = document.getElementById("chatbot-input");
+  const messagesDiv = document.getElementById("chatbot-messages");
+
+  function appendMessage(role, text) {
+    const div = document.createElement("div");
+    div.className = "message " + role;
+
+    const html = text
+      .replace(/```(.*?)```/gs, (match, code) => {
+        return `<pre><code>${code.trim()}</code><button class="copy-btn">Copy</button></pre>`;
+      })
+      .replace(/\n/g, "<br>");
+
+    div.innerHTML = html;
+    messagesDiv.appendChild(div);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    div.querySelectorAll(".copy-btn").forEach(btn => {
+      btn.onclick = () => {
+        const code = btn.previousElementSibling.textContent;
+        navigator.clipboard.writeText(code);
+        btn.innerText = "Copied!";
+        setTimeout(() => btn.innerText = "Copy", 1500);
+      };
+    });
+  }
+
+  async function sendMessage() {
+    const userText = input.value.trim();
+    if (!userText) return;
+
+    appendMessage("user", userText);
+    input.value = "";
+
+    const thinking = document.createElement("div");
+    thinking.className = "message bot";
+    thinking.textContent = "Thinking...";
+    messagesDiv.appendChild(thinking);
+
+    try {
+      const res = await fetch("chatbot_api.php", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ message: userText })
+      });
+
+      if (!res.ok) throw new Error("Network failure");
+      const data = await res.json();
+
+      if (data.success === false) {
+        throw new Error(data.error || "Server logic error");
+      }
+
+      messagesDiv.removeChild(thinking);
+      appendMessage("bot", data.reply || "No response returned.");
+
+      if (Array.isArray(data.history)) {
+        historyDiv.innerHTML = "";
+        data.history.forEach(q => {
+          const h = document.createElement("div");
+          h.className = "history-item";
+          h.textContent = q;
+          h.onclick = () => { input.value = q; input.focus(); };
+          historyDiv.appendChild(h);
+        });
+      }
+
+    } catch (e) {
+      if (messagesDiv.contains(thinking)) messagesDiv.removeChild(thinking);
+      appendMessage("bot", "⚠ Logic Error: Unable to reach the processing server.");
+    }
+  }
+
+  sendBtn.addEventListener("click", sendMessage);
+  input.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+});
+</script>
+</body>
+</html>
