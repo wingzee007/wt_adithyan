@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="app">
+        <p>The Number Is: {{updated()}}</p>
+        <p>Salary is {{emp.salary}}</p>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        const app = Vue.createApp({
+            setup() {
+                let num = Vue.ref(6);
+
+                const emp = Vue.ref({
+                    name: "Adithyan",
+                    salary: 60000,
+                });
+                function updated() {
+                    setTimeout(() => {
+                        num.value = 22;
+                        emp.value.salary = 100000;
+                    }, 2000);
+
+                    return num.value; // only one return works
+                }
+                return {
+                    updated,
+                    emp 
+                }
+            }
+        }).mount("#app");
+    </script>
+</body>
+
+</html>
