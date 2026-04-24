@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+</head>
+<body>
+    <div id="app">
+        <h1>Array Of Objects</h1>
+        <h2>Name is : {{employee.name}}</h2>
+        <h2>{{employee.name}} is {{employee.age}} years old</h2>
+        <h2>{{employee.name}}'s  salary is  {{employee.salar}} </h2>
+
+        <ol>
+            <li v-for="list in employee.projects" :key="list.project">
+                <span>
+                    {{list.project}} : {{list.tileline}}
+                </span>
+                <span>
+                    <input type="text" placeholder="comments">
+                </span>
+            </li>
+        </ol>
+        {{shuffleorder()}}
+    </div>
+    
+</body>
+<Script>
+    const {createApp,reactive} = Vue;
+    createApp({
+        data(){
+            const employee = reactive({
+                name : "Employee",
+                age : 23,
+                salar : 60000,
+                hasCoporateCard : false, //displays the spending limit only when the condition is true
+                SpendingLimit : 20000,
+                YearsWithCompany : 2,
+                projects : [
+                    {project:"first",tileline:"2 years"},
+                    {project:"second",tileline:"3 years"},
+                    {project:"third",tileline:"4 years"},
+        
+                ],// array of objects
+            });
+
+            function shuffleorder(){
+                setTimeout(()=>{employee.projects.sort(()=>Math.random()-0.5);
+                },5000);
+            }
+
+            return{employee,shuffleorder};
+        }
+    }).mount("#app")
+</Script>
+</html>

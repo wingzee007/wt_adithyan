@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+</head>
+<body>
+    <div id="app">
+        <h1>LINK</h1>
+        <a v-bind:href="url">PyWing here</a> 
+    </div>
+</body>
+
+<script>
+    const {createApp,ref} = Vue;
+    createApp({
+        data(){
+            const url="https://pywing.rf.gd/";
+
+            return{url};
+        }
+    }).mount("#app")
+</script>
+</html>

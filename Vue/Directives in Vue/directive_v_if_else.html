@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+</head>
+<body>
+    <div id="app">
+        <h1>Employee Details</h1>
+        <h2>{{msg}}</h2>
+        <h2>Name is : {{employee.name}}</h2>
+        <h2>{{employee.name}} is {{employee.age}} years old</h2>
+        <h2>Employee salaray is :{{employee.salar}}</h2>
+        <a v-bind:href="url">Click me</a>
+            <p v-if="employee.hasCoporateCard">Spending limit for card {{employee.SpendingLimit}}</p>
+            <p v-else-if="employee.salar>1000">Dont spend Too Much</p>
+            <p v-else>No Money</p>
+    </div>
+</body>
+
+<script>
+    const {createApp,ref,reactive} = Vue;
+    createApp({
+        data(){
+            const msg = "Hello Myself";
+            const url ="https://pywing.rf.gd/";
+            const employee = reactive({
+                name : "Employee",
+                age : 23,
+                salar : 60000,
+                hasCoporateCard : false, //displays the spending limit only when the condition is true
+                SpendingLimit : 20000,
+                YearsWithCompany : 2
+            });
+
+            return{msg,employee,url}
+        }
+    }).mount("#app")
+</script>
+</html>

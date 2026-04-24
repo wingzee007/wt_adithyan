@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{getmessage()}}</h1>
+        <span v-html="second()"></span>
+    </div>
+</body>
+
+<script>
+    const {createApp,ref,reactive} = Vue;
+    createApp({
+        data() {
+            const msg = "Hello First Line Heading";
+            const newmsg = "second line for directive";
+
+            function getmessage(){
+                return msg;
+            }
+
+            function second(){
+                return `<h1><u>${newmsg}</u></h1>`;
+            }
+            return{getmessage,second}
+        }
+
+    }).mount("#app")
+</script>
+</html>
