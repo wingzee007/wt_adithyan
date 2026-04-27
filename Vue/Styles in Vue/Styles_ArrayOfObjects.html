@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <span v-bind:style="sstyle">
+            Whats In The Box..!!!
+        </span>
+    </div>
+</body>
+
+<Script>
+    const {createApp,ref,reactive} = Vue;
+    createApp({
+        data()
+        {
+            const sstyle = {
+                fontSize: "50px",
+                backgroundColor:"lightgreen",
+                margin: "60px",
+                border: "2px solid black",
+            }
+
+            return{sstyle};
+        }
+
+    }).mount("#app")
+</Script>
+
+</html>
